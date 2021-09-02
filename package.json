@@ -1,0 +1,25 @@
+{
+  "name": "zkonacci",
+  "version": "0.0.1",
+  "description": "CTF game where players will need to create a zkProof that demonstrates the knowledge of the next number of the [Fibonacci sequence](https://en.wikipedia.org/wiki/Fibonacci_number).",
+  "scripts": {
+    "postinstall": "echo \"\\e[0;33mRunning trusted setup ceremony for testing  purposes.......... THIS WILL TAKE SOME MINUTES!!!\\e[0m\n\" && sleep 5 && cd circuits && snarkjs powersoftau new bn128 15 pot15_0000.ptau -v && snarkjs powersoftau contribute pot15_0000.ptau pot15_0001.ptau --name=\"First contribution\" -v && snarkjs powersoftau prepare phase2 pot15_0001.ptau pot15_final.ptau -v",
+    "build": "npm run build-circuits && npm run build-contracts",
+    "build-circuits": "cd circuits && circom zkOnacci.circom --r1cs --wasm --sym && snarkjs zkey new zkOnacci.r1cs pot15_final.ptau zkOnacci_0000.zkey && snarkjs zkey contribute zkOnacci_0000.zkey zkOnacci_final.zkey --name=\"1st Contributor Name\" -v && snarkjs zkey export verificationkey zkOnacci_final.zkey verification_key.json && snarkjs zkey export solidityverifier zkOnacci_final.zkey verifier.sol && sed -i 's/\\^0.6.11/\\^0.8.6/' verifier.sol && mv verifier.sol ../contracts",
+    "build-contracts": "abigen -sol contracts/zkonacci.sol -pkg contracts -out contracts/zkonacci.go"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/arnaubennassar/zkOnacci.git"
+  },
+  "author": "",
+  "license": "MIT License",
+  "bugs": {
+    "url": "https://github.com/arnaubennassar/zkOnacci/issues"
+  },
+  "homepage": "https://github.com/arnaubennassar/zkOnacci#readme",
+  "dependencies": {
+    "@openzeppelin/contracts": "^4.3.1",
+    "circomlib": "^0.5.0"
+  }
+}

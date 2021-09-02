@@ -1,0 +1,16 @@
+node_modules
+*.wasm
+*.r1cs
+*.sym
+*.ptau
+*verification_key.json
+*.zkey
+input.json
+proof.json
+public.json
+witness.json
+witness.wtns
+.vscode
+contracts/verifier.sol
+*_test.go
+
